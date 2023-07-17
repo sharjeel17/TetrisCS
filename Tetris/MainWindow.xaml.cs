@@ -182,9 +182,9 @@ namespace Tetris
         //draw game once canvas is loaded
         private async void GameCanvas_Loaded(object sender, RoutedEventArgs e)
         {
-            SoundPlayer musicPlayer = new SoundPlayer();
-            musicPlayer.SoundLocation = "song1.wav";
-            musicPlayer.Play();
+            //SoundPlayer musicPlayer = new SoundPlayer();
+            //musicPlayer.SoundLocation = "song1.wav";
+            //musicPlayer.Play();
             await GameLoop();
         }
 

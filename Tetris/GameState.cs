@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Tetris
 {
@@ -11,7 +12,7 @@ namespace Tetris
     {
         private Block currentBlock;
 
-        public Block CurrentBlock 
+        public Block CurrentBlock
         {
             get => currentBlock;
             private set
@@ -20,6 +21,8 @@ namespace Tetris
                 currentBlock.Reset();
             }
         }
+
+        public int Score { get; private set; }
 
         public gameGrid GameGrid { get; }
         public BlockQueue Queue { get; }
@@ -32,19 +35,19 @@ namespace Tetris
 
         }
 
-        public bool BlockFits() 
+        public bool BlockFits()
         {
-            foreach (Position p in CurrentBlock.TilePositions()) 
+            foreach (Position p in CurrentBlock.TilePositions())
             {
                 if (!GameGrid.isEmpty(p.Row, p.Column)) return false;
             }
             return true;
         }
 
-        public void RotateBlockCW() 
+        public void RotateBlockCW()
         {
             CurrentBlock.RotateCW();
-            if (!BlockFits()) 
+            if (!BlockFits())
             {
                 CurrentBlock.RotateCCW();
             }
@@ -58,11 +61,11 @@ namespace Tetris
             }
         }
 
-        public void MoveBlockLeft() 
+        public void MoveBlockLeft()
         {
             CurrentBlock.Move(0, -1);
 
-            if (!BlockFits()) 
+            if (!BlockFits())
             {
                 CurrentBlock.Move(0, 1);
             }
@@ -77,38 +80,70 @@ namespace Tetris
             }
         }
 
-        public bool isGameOver() 
+        public bool isGameOver()
         {
             return !(GameGrid.isRowEmpty(0) && GameGrid.isRowEmpty(1));
         }
 
-        private void PlaceBlock() 
+        private void PlaceBlock()
         {
-            foreach (Position p in CurrentBlock.TilePositions()) 
+            foreach (Position p in CurrentBlock.TilePositions())
             {
                 GameGrid[p.Row, p.Column] = CurrentBlock.id;
             }
 
-            GameGrid.clearFullRows();
+            Score += GameGrid.clearFullRows();
 
             if (isGameOver())
             {
                 GameOver = true;
             }
-            else 
+            else
             {
                 CurrentBlock = Queue.GetAndUpdate();
             }
         }
 
-        public void MoveBlockDown() 
+        //move block down if it fits
+        //called on down key
+        public void MoveBlockDown()
         {
             CurrentBlock.Move(1, 0);
-            if (!BlockFits()) 
+            if (!BlockFits())
             {
                 CurrentBlock.Move(-1, 0);
                 PlaceBlock();
             }
         }
+
+        //calculate distance from current tile (row,col) to the bottom
+        private int TileDropDistance(Position p)
+        {
+            int drop = 0;
+            while (GameGrid.isEmpty(p.Row + drop + 1, p.Column)) drop++;
+            return drop;
+        }
+
+        //check each tile (row,col) of the current block
+        //and take the minimum distance
+        public int BlockDropDistance() 
+        {
+            int drop = GameGrid.Rows;
+
+            foreach (Position p in CurrentBlock.TilePositions()) 
+            {
+                drop = System.Math.Min(drop, TileDropDistance(p));
+            }
+            return drop;
+        }
+
+        //drop block instantly
+        //called from Spacebar key
+        public void DropBlock() 
+        {
+            CurrentBlock.Move(BlockDropDistance(), 0);
+            PlaceBlock();
+        }
+
     }
 }

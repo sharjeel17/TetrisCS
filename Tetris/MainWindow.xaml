@@ -15,7 +15,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
@@ -25,47 +25,52 @@
         <Grid.Background>
             <ImageBrush ImageSource="Assets/Background.png"/>
         </Grid.Background>
+
         <Viewbox Grid.Row="1"
                  Grid.Column="1"
                  Margin="0,0,0,20">
             <Canvas x:Name="GameCanvas"
-                Background="#101010"
-                Width="250"
-                Height="500" 
-                ClipToBounds="True"
-                Loaded="GameCanvas_Loaded">
-                <Grid Height="500" Width="250"/>
-            </Canvas>
+                    Background="#101010"
+                    Width="250"
+                    Height="500"
+                    ClipToBounds="True"
+                    Loaded="GameCanvas_Loaded"/>
         </Viewbox>
 
         <TextBlock x:Name="ScoreText"
                    Grid.Row="0"
                    Grid.Column="1"
                    Text="Score: "
-                   Margin="0,10"
+                   Margin="0, 10"
                    TextAlignment="Center"/>
 
         <StackPanel Grid.Row="1"
-                    Grid.Column="0"
                     VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
-            <TextBlock Text="Hold"
+                    HorizontalAlignment="Center" Width="253" Height="167">
+            <TextBlock Text="Up: CW Rotation"
                        TextAlignment="Center"/>
-            <Image x:Name="HoldImage"
-                   Margin="20"
-                   Width="125"/>
+            <TextBlock Text="Down: Move down"
+                       TextAlignment="Center"/>
+            <TextBlock Text="Z: CCW Rotation"
+                       TextAlignment="Center"/>
+            <TextBlock Text="Space: Place instantly"
+                       TextAlignment="Center"/>
+
         </StackPanel>
 
         <StackPanel Grid.Row="1"
                     Grid.Column="2"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left">
-            <TextBlock Text="Next"
+            <TextBlock x:Name="NextBlockGame"
+                        Text="Next"
                        TextAlignment="Center"/>
+
             <Image x:Name="NextImage"
                    Margin="20"
                    Width="125"/>
         </StackPanel>
+
         <Grid x:Name="GameOverMenu"
               Background="#CC000000"
               Grid.RowSpan="2"
@@ -76,20 +81,18 @@
                 <TextBlock Text="Game Over"
                            FontSize="48"
                            TextAlignment="Center"/>
+
                 <TextBlock x:Name="FinalScoreText"
                            Text="Score: "
                            FontSize="36"
                            TextAlignment="Center"/>
+
                 <Button Content="Play Again"
-                        Background="Purple"
+                        Background="LightGreen"
                         Margin="0,20,0,0"
                         Padding="5"
                         Click="PlayAgain_Click"/>
             </StackPanel>
-
-        </Grid> 
-        
-
-
+        </Grid>
     </Grid>
 </Window>
